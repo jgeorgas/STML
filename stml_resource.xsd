@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.cefns.nau.edu/~jg455/STCML.xsd" 
+	xmlns:archdiff="http://www.ics.uci.edu/pub/arch/xArch/diff.xsd" 
+	xmlns:archinstance="http://www.ics.uci.edu/pub/arch/xArch/instance.xsd" 
+	xmlns:archtypes="http://www.ics.uci.edu/pub/arch/xArch/types.xsd" 
+	xmlns:xlink="http://www.w3.org/1999/xlink" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	attributeFormDefault="qualified" 
+	elementFormDefault="qualified" 
+	targetNamespace="http://www.cefns.nau.edu/~jg455/stcml.xsd">
+
+	<!-- Import namespaces used -->
+	<xsd:import namespace="http://www.ics.uci.edu/pub/arch/xArch/types.xsd" schemaLocation="http://www.isr.uci.edu/projects/xarchuci/ext/types.xsd"/>
+	<xsd:import namespace="http://www.ics.uci.edu/pub/arch/xArch/instance.xsd" schemaLocation="http://www.isr.uci.edu/projects/xarchuci/core/instance.xsd"/>
+	<xsd:import namespace="http://www.ics.uci.edu/pub/arch/xArch/diff.xsd" schemaLocation="http://www.isr.uci.edu/projects/xarchuci/ext/diff.xsd"/>
+
+	<xsd:annotation>
+		<xsd:documentation>
+		STML Resource
+		
+		A schema that captures the concepts of resources, which may be any kind
+		of resource used or produced in the software engineering enterprise (such
+		as architecture or source code).
+
+        LOG:
+        
+        11/28/2011 -- [John.Georgas@nau.edu]
+        Initial release of the resource schema, after re-factoring and clean-up
+        of the STML language (previously called STCML).
+        
+        NOTES:
+        -- Directly referencing elements of xADL here "brings in" descriptions of
+        systems using that schema into stml files: So, the definition of the schema
+        is found in the xADL schemas, but the content using that schema is actually
+        found locally within the stml file. ** This will work with apigen because the 
+        tool can compile xADL schemas natively. Other kinds of schemas might not be 
+        able to be included, if apigen is to be used. ** 
+        				
+        TODO:
+        	-- Directly referencing elements of xADL
+        	-- File details use xsd:string within attributes. Need to transition to elements?
+        	-- Add namespace references into each of the type links
+        	-- Fix the namespace references to appropriate URLs. Github publishing? Need
+        	clear URLs for Apigen library generation.
+        	
+        	????:
+        	
+		</xsd:documentation>
+	</xsd:annotation>
+	
+	<!--
+		TYPE: ResourceSet
+		
+		A container type for Resource elements.
+	-->
+	<xsd:complexType name="ResourceSet">
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="resource" type="Resource"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!--
+		TYPE: Resource
+		
+		A parent element for development resources. A simple structure, that can be
+		easily extended.
+	-->
+	<xsd:complexType name="Resource">
+		<xsd:attribute name="id" type="archinstance:Identifier"/>
+	</xsd:complexType>
+	
+	<!-- 
+		TYPE: ResourceNode
+		
+		A ResourceNode allows the creation of graph nodes (see details in the STML_graph
+		schema) that are associated with Resource elements.
+	-->
+	<xsd:complexType name="ResourceNode">
+		<xsd:complexContent>
+			<xsd:extension base="Node">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="resource" type="archinstance:XMLLink"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<!--
+		TYPE: xADLStructureResource
+		
+		A xADLStructureResource is a resource element that represents an architectural
+		description created using the xADL 2.0 (http://www.isr.uci.edu/projects/xarchuci/)
+		modeling constructs.
+	-->
+	<xsd:complexType name="xADLStructureResource">
+		<xsd:complexContent>
+			<xsd:extension base="Resource">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="xADLStructure" type="ArchStructure"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<!--
+		TYPE: xADLTypesResource
+		
+		This type captures the resource that would be needed to hold the definitions of
+		xADL 2.0 type descriptions, as defined in the xADL schemas.
+	-->
+	<xsd:complexType name="xADLTypesResource">
+		<xsd:complexContent>
+			<xsd:extension base="Resource">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="xADLTypes" type="ArchTypes"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<!--
+		TYPE: SourceFileResource
+		
+		This resource models a simple file containing source code -- needed for
+		identifying dependencies -- and modeled by a path and a name.
+	-->
+	<xsd:complexType name="SourceFileResource">
+		<xsd:complexContent>
+			<xsd:extension base="Resource">
+    				<xsd:attribute name="fileName" type="xsd:string"/>
+    				<xsd:attribute name="path" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<!--
+		TYPE: VersionedSourceFileResource
+		
+		This resource models a source code file under version control.
+	-->
+	<xsd:complexType name="SourceFileResource">
+		<xsd:complexContent>
+			<xsd:extension base="SourceFileResource">
+    				<xsd:attribute name="versionID" type="xsd:string"/>
+    				<xsd:attribute name="repositoryURL" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<!--
+	
+	**
+	
+	UML architectures using XMI (or any other XML-based technology) link off of
+	this schema, as above
+	
+	**
+	
+	-->
+</xsd:schema>
