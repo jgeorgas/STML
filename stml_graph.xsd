@@ -26,6 +26,8 @@
         11/30/2011 -- [John.Georgas@nau.edu]
         Initial release of the resource schema, after re-factoring and clean-up
         of the STML language (previously called STCML).
+        1/30/2012 -- [John.Georgas@nau.edu]
+        Added additional elements to support linking to events in Edge and DirectedEdge.
         
         NOTES:
         				
@@ -100,11 +102,13 @@
 	<!--
 		TYPE: Edge
   
-		A generic undirected graph edge.
+		A generic undirected graph edge; contains an optional link to an event that caused this
+		edge's creation.
 	-->
 	<xsd:complexType name="Edge">
 		<xsd:sequence>
 			<xsd:element maxOccurs="2" minOccurs="2" name="endpoint" type="archinstance:XMLLink"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="linkedEvent" type="archinstance:XMLLink"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="archinstance:Identifier"/>
 	</xsd:complexType>
@@ -131,6 +135,7 @@
 		<xsd:sequence>
 			<xsd:element maxOccurs="1" minOccurs="1" name="head" type="archinstance:XMLLink"/>
 			<xsd:element maxOccurs="1" minOccurs="1" name="tail" type="archinstance:XMLLink"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="linkedEvent" type="archinstance:XMLLink"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="archinstance:Identifier"/>
 	</xsd:complexType>
