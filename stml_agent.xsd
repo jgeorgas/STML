@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://www.cefns.nau.edu/~jg455/schemas/stml/stml_agent.xsd" 
+<xsd:schema xmlns="http://www.cefns.nau.edu/~jg455/schemas/stml/stml_agent.xsd"
 	xmlns:archdiff="http://www.ics.uci.edu/pub/arch/xArch/diff.xsd" 
 	xmlns:archinstance="http://www.ics.uci.edu/pub/arch/xArch/instance.xsd" 
 	xmlns:archtypes="http://www.ics.uci.edu/pub/arch/xArch/types.xsd" 
 	xmlns:xlink="http://www.w3.org/1999/xlink" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	attributeFormDefault="qualified" 
-	elementFormDefault="qualified" 
+	elementFormDefault="qualified"
 	targetNamespace="http://www.cefns.nau.edu/~jg455/schemas/stml/stml_agent.xsd">
 
 	<!-- Import namespaces used -->

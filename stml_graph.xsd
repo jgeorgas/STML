@@ -27,7 +27,8 @@
         Initial release of the resource schema, after re-factoring and clean-up
         of the STML language (previously called STCML).
         1/30/2012 -- [John.Georgas@nau.edu]
-        Added additional elements to support linking to events in Edge and DirectedEdge.
+        Added additional elements to support linking to events: LinkedEdge, WeightedLinkedEdge,
+        DirectedLinkedEdge, WeightedDirectedLinkedEdge
         
         NOTES:
         				
@@ -102,16 +103,27 @@
 	<!--
 		TYPE: Edge
   
-		A generic undirected graph edge; contains an optional link to an event that caused this
-		edge's creation.
+		A generic undirected graph edge.
 	-->
 	<xsd:complexType name="Edge">
 		<xsd:sequence>
 			<xsd:element maxOccurs="2" minOccurs="2" name="endpoint" type="archinstance:XMLLink"/>
-			<xsd:element maxOccurs="1" minOccurs="0" name="linkedEvent" type="archinstance:XMLLink"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="archinstance:Identifier"/>
 	</xsd:complexType>
+	
+	<!-- LinkedEdge
+		A generic undirected edge, with a link to an event that caused the edge's creation.
+	-->
+	<xsd:complexType name="LinkedEdge">
+		<xsd:complexContent>
+			<xsd:extension base="Edge">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="linkedEvent" type="archinstance:XMLLink"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	<xsd:complexType>
 	
 	<!-- 
 		TYPE: WeightedEdge
@@ -126,6 +138,20 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 	
+	<!-- 
+		TYPE: WeightedLinkedEdge
+		
+		A weighted edge, that contains a string representation of a weight, as well
+		as a link to an event.
+	-->
+	<xsd:complexType name="WeightedLinkedEdge">
+		<xsd:complexContent>
+			<xsd:extension base="LinkedEdge">
+				<xsd:attribute name="weight" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
 	<!--
 		TYPE: DirectedEdge
   
@@ -135,11 +161,25 @@
 		<xsd:sequence>
 			<xsd:element maxOccurs="1" minOccurs="1" name="head" type="archinstance:XMLLink"/>
 			<xsd:element maxOccurs="1" minOccurs="1" name="tail" type="archinstance:XMLLink"/>
-			<xsd:element maxOccurs="1" minOccurs="0" name="linkedEvent" type="archinstance:XMLLink"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="archinstance:Identifier"/>
 	</xsd:complexType>
 	
+	<!--
+		TYPE: DirectedLinkedEdge
+  
+		A generic directed graph edge, with a link to an event.
+	-->
+	<xsd:complexType name="DirectedLinkedEdge">
+		<xsd:complexContent>
+			<xsd:extension base="DirectedEdge">
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="0" name="linkedEvent" type="archinstance:XMLLink"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+		
 	<!--
 		TYPE: WeightedDirectedEdge
 		
@@ -148,6 +188,19 @@
 	<xsd:complexType name="WeightedDirectedEdge">
 		<xsd:complexContent>
 			<xsd:extension base="DirectedEdge">
+				<xsd:attribute name="weight" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<!--
+		TYPE: WeightedDirectedLinkedEdge
+		
+		An edge combining directionality and weight.	
+	-->
+	<xsd:complexType name="WeightedDirectedLinkedEdge">
+		<xsd:complexContent>
+			<xsd:extension base="WeightedDirectedEdge">
 				<xsd:attribute name="weight" type="xsd:string"/>
 			</xsd:extension>
 		</xsd:complexContent>
