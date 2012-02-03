@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns="http://www.cefns.nau.edu/~jg455/STCML.xsd" 
+<xsd:schema xmlns="http://www.cefns.nau.edu/~jg455/schemas/stml/stml_core.xsd" 
 	xmlns:archdiff="http://www.ics.uci.edu/pub/arch/xArch/diff.xsd" 
 	xmlns:archinstance="http://www.ics.uci.edu/pub/arch/xArch/instance.xsd" 
 	xmlns:archtypes="http://www.ics.uci.edu/pub/arch/xArch/types.xsd" 
@@ -7,7 +7,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	attributeFormDefault="qualified" 
 	elementFormDefault="qualified" 
-	targetNamespace="http://www.cefns.nau.edu/~jg455/stcml.xsd">
+	targetNamespace="http://www.cefns.nau.edu/~jg455/schemas/stml/stml_core.xsd">
 
 	<!-- Import namespaces used -->
 	<xsd:import namespace="http://www.ics.uci.edu/pub/arch/xArch/types.xsd" schemaLocation="http://www.isr.uci.edu/projects/xarchuci/ext/types.xsd"/>
