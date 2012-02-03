@@ -77,8 +77,8 @@
 		<xsd:complexContent>
 			<xsd:extension base="Agent">
 				<xsd:sequence>
-					<xsd:element maxOccurs="unbounded" minOccurs="0" name="assignedTo" type="Task"/>
-					<xsd:element maxOccurs="unbounded" minOccurs="0" name="ownsResource" type="Resource"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="assignedTo" type="archinstance:XMLLink"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="ownsResource" type="archinstance:XMLLink"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
@@ -95,7 +95,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="Agent">
 				<xsd:sequence>
-					<xsd:element maxOccurs="unbounded" minOccurs="0" name="managedResource" type="Resource"/>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="managedResource" type="archinstance:XMLLink"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>

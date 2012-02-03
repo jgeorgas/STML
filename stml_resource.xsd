@@ -96,7 +96,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="Resource">
 				<xsd:sequence>
-					<xsd:element maxOccurs="1" minOccurs="1" name="xADLStructure" type="ArchStructure"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="xADLStructure" type="archtypes:ArchStructure"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
@@ -112,7 +112,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="Resource">
 				<xsd:sequence>
-					<xsd:element maxOccurs="1" minOccurs="1" name="xADLTypes" type="ArchTypes"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="xADLTypes" type="archtypes:ArchTypes"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>

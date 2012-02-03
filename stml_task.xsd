@@ -67,7 +67,7 @@
 			<xsd:element maxOccurs="1" minOccurs="1" name="lastActiveAgent" type="archinstance:XMLLink"/>
 			<xsd:element maxOccurs="unbounded" minOccurs="1" name="sourceFileDependency" type="archinstance:XMLLink"/>
 			<xsd:element maxOccurs="unbounded" minOccurs="0" name="comment" type="Comment"/>
-			<xsd:element maxOccurs="1" minOccurs="0" name="description" type="Description"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="description" type="archinstance:Description"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="archinstance:Identifier"/>
 	</xsd:complexType>

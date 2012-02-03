@@ -76,7 +76,7 @@
 		<xsd:complexContent>
 			<xsd:extension base="Event">
 				<xsd:sequence>
-					<xsd:element maxOccurs="1" minOccurs="1" name="description" type="Description"/>
+					<xsd:element maxOccurs="1" minOccurs="1" name="description" type="archinstance:Description"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
@@ -188,7 +188,7 @@
 				<xsd:sequence>
 					<xsd:element maxOccurs="1" minOccurs="0" name="time" type="Time"/>
 					<xsd:element maxOccurs="unbounded" minOccurs="0" name="resourcesInvolved" type="ResourceCollection"/>
-					<xsd:element maxOccurs="1" minOccurs="0" name="description" type="Description"/>
+					<xsd:element maxOccurs="1" minOccurs="0" name="description" type="archinstance:Description"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>

@@ -66,7 +66,7 @@
 	<xsd:complexType name="Group">
 		<xsd:sequence>
 			<xsd:element maxOccurs="unbounded" minOccurs="1" name="member" type="archinstance:XMLLink"/>
-			<xsd:element maxOccurs="1" minOccurs="0" name="description" type="Description"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="description" type="archinstance:Description"/>
 			<xsd:element maxOccurs="unbounded" minOccurs="0" name="subGroup" type="archinstance:XMLLink"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="archinstance:Identifier"/>
