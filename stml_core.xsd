@@ -74,14 +74,14 @@
 		The details of each of these elements is found in specialized schemas that
 		come together to form the whole of the STML language.
 	-->
-	<xsd:complexType name="STCMLRoot">
+	<xsd:complexType name="STMLRoot">
 		<xsd:sequence>
 			<xsd:element maxOccurs="1" minOccurs="0" name="agents" type="stmlagent:AgentSet"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="tasks" type="stmltask:TaskSet"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="resources" type="stmlresource:ResourceSet"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="events" type="stmlevent:EventSet"/>
 			<xsd:element maxOccurs="1" minOccurs="0" name="organization" type="stmlorganization:GroupSet"/>
-			<xsd:element maxOccurs="unbounded" minOccurs="0" name="commNetwork" type="stmlgraphUndirectedGraph"/>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="commNetwork" type="stmlgraph:UndirectedGraph"/>
 			<xsd:element maxOccurs="unbounded" minOccurs="0" name="techDependencyNetwork" type="stmlgraph:UndirectedGraph"/>
 			<xsd:element maxOccurs="unbounded" minOccurs="0" name="teamNetwork" type="stmlgraph:UndirectedGraph"/>
 		</xsd:sequence>
