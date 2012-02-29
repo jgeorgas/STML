@@ -138,7 +138,7 @@
 		
 		This resource models a source code file under version control.
 	-->
-	<xsd:complexType name="SourceFileResource">
+	<xsd:complexType name="VersionedSourceFileResource">
 		<xsd:complexContent>
 			<xsd:extension base="SourceFileResource">
     				<xsd:attribute name="versionID" type="xsd:string"/>
