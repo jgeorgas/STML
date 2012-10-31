@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The 'xsd' namespace is the "schema of schemas" as defined by the XSchema
+  standard.  The 'xlink' namespace defines the namespace for XLink attributes
+  and elements.  The targetNamespace defines the URI of the namespace
+  which THIS XSchema is defining.  Other XSchemas should use this URL
+  when referring to things defined in this XSchema.
+ -->
+<xsd:schema xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xlink="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/xlink.xsd"
+            targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+            elementFormDefault="qualified"
+            attributeFormDefault="qualified">
+
+  <!-- Import XLink Schema -->
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/xlink.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/xlink.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      xArch Instances XML Schema 1.0
+
+      Change Log:
+         2004-06-27: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Added ID/Description to InterfaceInstanceMappings
+         2002-07-23: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed XLink schema URL to a more stable URL
+         2002-01-28: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Upgraded to 2001 XML Schema standard and validated
+           with XML Spy 4.2.  Changes were to the namespace
+           declaration for 'xsd' in the header, as well
+           as correcting the complex-from-simple derivation
+           of Direction to be an extension of a new simple
+           type, DirectionSimpleType.
+         2001-04-12: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Cleaned up and validated with XML Spy 3.5.
+         2000-12-06: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Fixed cardinality of 'member' in type Group.
+         2000-12-04: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Removed explicit collections from the schema
+           and replaced them with Kleene-star type elements
+           for more flexibility/extensibility.
+         2000-11-18: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Added InterfaceInstanceMappingCollection between
+           subarchitecture and set of interface instance
+           mappings.
+         2000-10-24: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed 'archInstances' to 'archInstance'
+           Changed interface mapping names from 'from' and
+           'to' to 'inner' and 'outer.'
+         2000-10-24: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Added xArch root element.
+         2000-10-19: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed names of Interface to InterfaceInstance.
+           Added subarchitectures in connector, component
+           instances with interface mappings.
+         2000-10-13: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed names of Component, Connector, and Link
+           to ComponentInstance, ConnectorInstance, and LinkInstance,
+           respectively.
+         2000-10-12: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Added grouping mechanism with appropriate types.
+           Changed name of element archStructure to archInstances.
+           Changed name of type ArchStructure to ArchInstances.
+           Changed name of file from structure.xsd to instance.xsd
+         2000-10-02: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed "anchorInterface" name to "anchorOnInterface."
+           Changed name of element archCore to archStructure.
+           Changed name of type ArchCore to ArchStructure.
+           Added id + description to ArchStructure type.
+           Changed name from core.xsd to structure.xsd.
+         2000-09-28: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Fixed some syntax errors and validated with XSV.
+         2000-09-27: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Initial Development
+
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!--
+    ELEMENT: xArch
+
+    The xArch element must be the root (top-level) element of an xArch
+    document.  Because of the single-inheritance model of XML Schema
+    1.0, the contents of xArch are not restricted.  It is expected that
+    xArch will contain only tags that are declared as xsd:element in
+    this and other schemas (archInstances, for example).
+   -->
+  <xsd:element name="xArch">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--
+    ELEMENT: archInstance
+    
+    The archInstance element (of type ArchInstance) is the root element
+    that is the aegis over all other elements in the architecture
+    structure.  It has four groups of subelements: componentInstances,
+    connectorInstances, linkInstances, and groups.  It represents instantiated 
+    components, connectors, links, and interfaces in an architecture, as well 
+    as different logical groupings of these entities.
+   -->
+  <xsd:element name="archInstance" type="ArchInstance"/>
+  
+  <!--
+    TYPE: Identifier
+
+    An Identifier is currently defined as an XML ID type.  
+    It must be unique in the space of identified things.  
+    Most unique entities in this schema and
+    extensions to it will have an identifier.  The Identifier
+    must be used as an attribute because it is of the 
+    xsd:ID type, and this must exist only in attributes, 
+    never elements, to retain compatibility with XML 
+    1.0 DTD's.
+   -->
+  <xsd:simpleType name="Identifier">
+    <xsd:restriction base="xsd:ID">
+      <xsd:minLength value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!--
+    TYPE: Description
+
+    A Description is a human-readable string describing
+    an entity.
+   -->
+  <xsd:complexType name="Description">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string"/>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: DirectionSimpleType
+
+    This simple type is encapsulated in a complex type
+    called Direction.  See the 'Direction' type for
+    more information.
+   -->
+  <xsd:simpleType name="DirectionSimpleType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="none"/>
+      <xsd:enumeration value="in"/>
+      <xsd:enumeration value="out"/>
+      <xsd:enumeration value="inout"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <!--
+    TYPE: Direction
+
+    A direction specifies the direction of an interface
+    entity.  An interface can be "in" (provided) or
+    "out" (required).  An "inout" interface represents
+    an interface that has parts that are both provided
+    and required.
+   -->
+  <xsd:complexType name="Direction">
+    <xsd:simpleContent>
+      <xsd:extension base="DirectionSimpleType"/>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: XMLLink
+  
+    This type is a schema definition that encapsulates
+    the parts of the XLink definition that are useful
+    in the xArch context.
+   -->
+  <xsd:complexType name="XMLLink">
+    <xsd:attribute ref="xlink:type"/>
+    <xsd:attribute ref="xlink:href"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: InterfaceInstance
+
+    The InterfaceInstance type describes an opaque interface for use
+    at the instance level.  No semantic information is provided
+    at this level.  An opaque interface instance contains an ID,
+    description, and a direction.  This may be connected
+    to other interface instances via a link.  The direction is
+    optional.
+   -->
+  <xsd:complexType name="InterfaceInstance">
+    <xsd:sequence>
+      <xsd:element name="description" type="Description"/>
+      <xsd:element name="direction"   type="Direction"
+                   minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="id"          type="Identifier"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: ComponentInstance
+  
+    The ComponentInstance type describes an opaque component for use
+    at the structural level.  No semantic information is provided
+    at this level.  An opaque component contains an ID,
+    description, and zero or more interface instances.
+
+    A component instance may also have substructure, described
+    in the optional subArchitecture tag.  In this case, the
+    interfaces on this component are mapped to interfaces
+    on subcomponents/subconnectors of this component.
+   -->
+  <xsd:complexType name="ComponentInstance">
+    <xsd:sequence>
+      <xsd:element name="description" type="Description"/>
+      <xsd:element name="interfaceInstance" 
+                   type="InterfaceInstance"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="subArchitecture"   
+                   type="SubArchitecture"
+                   minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="id"          type="Identifier"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: ConnectorInstance
+
+    The ConnectorInstance type describes an opaque connector for use
+    at the structural level.  No semantic information is provided
+    at this level.  An opaque connector contains an ID,
+    description, and zero or more interface instances.
+
+    A connector instance may also have substructure, described
+    in the optional subArchitecture tag.  In this case, the
+    interfaces on this connector are mapped to interfaces
+    on subcomponents/subconnectors of this connector.
+   -->
+  <xsd:complexType name="ConnectorInstance">
+    <xsd:sequence>
+      <xsd:element name="description"       
+                   type="Description"/>
+      <xsd:element name="interfaceInstance" 
+                   type="InterfaceInstance"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="subArchitecture"   
+                   type="SubArchitecture"
+                   minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="id"                type="Identifier"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: Point
+
+    The Point type describes an endpoint of a link.  All
+    links at the instance level exist between interfaces on
+    components and connectors.  A Point has an XLink to
+    exactly one interfaceInstance.
+   -->
+  <xsd:complexType name="Point">
+    <xsd:sequence>
+      <xsd:element name="anchorOnInterface" type="XMLLink"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+    TYPE: LinkInstance
+
+    The LinkInstance type describes a link between two interface
+    instances. All links at the instance level exist between 
+    interfaces on components and connectors.  A LinkInstance 
+    has an ID, a description, and exactly two endpoints.
+   -->
+  <xsd:complexType name="LinkInstance">
+    <xsd:sequence>
+      <xsd:element name="description" type="Description"/>
+      <xsd:element name="point" type="Point"
+                   minOccurs="2" maxOccurs="2"/>
+    </xsd:sequence>
+    <xsd:attribute name="id"          type="Identifier"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: Group
+    
+    The Group type describes a logical grouping of architecture
+    elements (components, connectors, and links).  Groups may
+    also be members of other groups.  As such, the member XLink
+    may point at a component instance, a connector instance,
+    a link instance, or another group.
+   -->
+  <xsd:complexType name="Group">
+    <xsd:sequence>
+      <xsd:element name="description" type="Description"/>
+      <xsd:element name="member" type="XMLLink"
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id"          type="Identifier"/>
+  </xsd:complexType>
+
+  <!-- 
+    TYPE: InterfaceInstanceMapping
+
+    The InterfaceInstanceMapping type defines a mapping
+    between an interface on a component/connector that has
+    a subarchitecture, and the interface within that
+    component/connector that the higher-level interface
+    represents.  The 'from' XMLLink points to the interface
+    on the component with substructure, and the 'to' XMLLink
+    points to the interface within the substructure.
+  -->
+  <xsd:complexType name="InterfaceInstanceMapping">
+    <xsd:sequence>
+      <xsd:element name="description" type="Description"/>
+      <xsd:element name="outerInterfaceInstance" type="XMLLink"/>
+      <xsd:element name="innerInterfaceInstance" type="XMLLink"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="Identifier"/>
+  </xsd:complexType>
+
+  <!-- 
+    TYPE: SubArchitecture
+
+    The SubArchitecture type describes how subarchitectures are included
+    at the structure level. The substructure contains an archStructure 
+    (containing the subarchitecture) and a set of interface instance
+    mappings that map interfaces at the higher-level component/connector
+    onto interfaces of one of the lower-level components/connectors.
+  -->
+  <xsd:complexType name="SubArchitecture">
+    <xsd:sequence>
+      <xsd:element name="archInstance" type="ArchInstance"/>
+      <xsd:element name="interfaceInstanceMapping"
+                   type="InterfaceInstanceMapping"
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+    TYPE: ArchInstance
+
+    The ArchInstance type describes the structural description of
+    an architecture instance.  It has no semantic information associated 
+    with it.  It is composed of three collections of instances: of connector 
+    instances, component instances, and link instances.  It also contains a 
+    collection of logical groupings of connector, component, and link instances, 
+    which may be used to indicate substructure, distribution, or any other kind
+    of group.
+    
+    This also forms the basis for schema extensions that can more 
+    richly describe this skeleton architecture.
+   -->
+  <xsd:complexType name="ArchInstance">
+    <xsd:sequence>
+      <xsd:element name="description"       type="Description"/>
+      <xsd:element name="componentInstance" type="ComponentInstance"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="connectorInstance" type="ConnectorInstance"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="linkInstance"      type="LinkInstance"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="group"             type="Group"
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="id"                          type="Identifier"/>
+  </xsd:complexType>
+
+</xsd:schema>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema 
+	xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/changesets.xsd" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:instance="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+	targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/changesets.xsd"
+	elementFormDefault="qualified" 
+	attributeFormDefault="qualified">
+
+	<xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd" schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"/>
+
+	<xsd:element name="archChangeSets" type="ArchChangeSets"/>
+
+	<xsd:simpleType name="BooleanValue">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="false"/>
+			<xsd:enumeration value="true"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="ArchChangeSets">
+		<xsd:sequence>
+			<xsd:element name="changeSet" type="ChangeSet" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="relationship" type="Relationship" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="group" type="Group" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="changeSetOrder" type="xsd:string"/>
+		<xsd:attribute name="groupOrder" type="xsd:string"/>
+		<xsd:attribute name="appliedChangeSets" type="xsd:string"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="ChangeSet">
+		<xsd:sequence>
+			<xsd:element name="description" type="instance:Description"/>
+			<xsd:element name="xArchElement" type="ElementSegment"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="instance:Identifier"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="ChangeSegment">
+		<xsd:attribute name="reference" type="xsd:string"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="AttributeSegment">
+		<xsd:complexContent>
+			<xsd:extension base="ChangeSegment">
+				<xsd:attribute name="value" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ElementSegment">
+		<xsd:complexContent>
+			<xsd:extension base="ChangeSegment">
+				<xsd:sequence>
+					<xsd:element name="changeSegment" type="ChangeSegment" minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+				<xsd:attribute name="type" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ElementManySegment">
+		<xsd:complexContent>
+			<xsd:extension base="ChangeSegment">
+				<xsd:sequence>
+					<xsd:element name="changeSegment" type="ElementSegment" minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="Relationship">
+		<xsd:attribute name="id" type="instance:Identifier"/>
+		<xsd:attribute name="generated" type="BooleanValue"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="VariantRelationship">
+		<xsd:complexContent>
+			<xsd:extension base="Relationship">
+				<xsd:sequence>
+					<xsd:element name="variantChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+				<xsd:attribute name="atLeast" type="xsd:int"/>
+				<xsd:attribute name="atMost" type="xsd:int"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="AndRelationship">
+		<xsd:complexContent>
+			<xsd:extension base="Relationship">
+				<xsd:sequence>
+					<xsd:element name="andChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="andNotChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="impliesChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="impliesNotChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="orChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="orNotChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="OrRelationship">
+		<xsd:complexContent>
+			<xsd:extension base="Relationship">
+				<xsd:sequence>
+					<xsd:element name="orChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="orNotChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="impliesChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="impliesNotChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="andChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+					<xsd:element name="andNotChangeSet" type="instance:XMLLink" minOccurs="0" maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="Group">
+		<xsd:sequence>
+			<xsd:element name="description" type="instance:Description"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="instance:Identifier"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="XArchPathGroup">
+		<xsd:complexContent>
+			<xsd:extension base="Group">
+				<xsd:attribute name="xArchPath" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ManualGroup">
+		<xsd:complexContent>
+			<xsd:extension base="Group">
+				<xsd:sequence>
+					<xsd:element name="item" type="instance:XMLLink"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+</xsd:schema>

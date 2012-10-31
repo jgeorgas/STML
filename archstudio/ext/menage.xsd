@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:archtypes="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+            xmlns:archoptions="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/options.xsd"
+            targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/menage.xsd"
+            elementFormDefault="qualified"
+            attributeFormDefault="qualified">
+
+  <!-- Import namespaces used -->
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"/>
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/options.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/options.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      Menage XML Schema 1.0
+
+      Depends on: {options.xsd, types.xsd}
+
+      Change Log:
+         2003-12-04: Akash Garg [agarg@uci.edu]
+           Added OptionalConnectorPosition
+         2002-05-10: Rob Egelink [egelink@ics.uci.edu]:
+           Initial Development
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!--
+    TYPE: Position
+   -->
+  <xsd:complexType name="Position">
+    <xsd:attribute name="x" type="xsd:string"/>
+    <xsd:attribute name="y" type="xsd:string"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: OptionalComponentPosition
+   -->
+  <xsd:complexType name="OptionalComponentPosition">
+    <xsd:complexContent>
+      <xsd:extension base="archoptions:OptionalComponent">
+        <xsd:sequence>
+          <xsd:element name="position" type="Position"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  
+  <!--
+    TYPE: OptionalConnectorPosition
+   -->
+  <xsd:complexType name="OptionalConnectorPosition">
+    <xsd:complexContent>
+      <xsd:extension base="archoptions:OptionalConnector">
+        <xsd:sequence>
+          <xsd:element name="position" type="Position"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: OptionalInterfacePosition
+   -->
+  <xsd:complexType name="OptionalInterfacePosition">
+    <xsd:complexContent>
+      <xsd:extension base="archoptions:OptionalInterface">
+        <xsd:sequence>
+          <xsd:element name="position" type="Position"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: OptionalSignaturePosition
+   -->
+  <xsd:complexType name="OptionalSignaturePosition">
+    <xsd:complexContent>
+      <xsd:extension base="archoptions:OptionalSignature">
+        <xsd:sequence>
+          <xsd:element name="position" type="Position"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+</xsd:schema>
+

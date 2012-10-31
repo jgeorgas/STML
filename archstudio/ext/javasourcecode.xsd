@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/javasourcecode.xsd"
+            xmlns:impl="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/implementation.xsd"
+            xmlns:archvariants="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd"
+            xmlns:archtypes="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+            xmlns:archinst="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/javasourcecode.xsd"
+            elementFormDefault="qualified"
+            attributeFormDefault="qualified">
+
+  <!-- Import namespaces used -->
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"/>
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"/>
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd"/>
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/implementation.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/implementation.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      xArch Java Source Code XML Schema 1.0
+      
+      This schema allows the user to specify the source code
+      for a Java implementation of a component, connector,
+      or interface type.
+
+      Depends on: {types.xsd, variants.xsd, implementation.xsd,
+                   javaimplementation.xsd}
+        Note: The actual dependency set of this extension is
+        just javaimplementation, but because of XML Schema 
+        1.0's single inheritance model, we also extend variants
+        so that a component/connector type may have both 
+        variants and an implementation.
+
+      Change Log:
+        2004-07-16: Eric M. Dashofy [edashofy@ics.uci.edu]:
+          Refactored elements to add genericity and allow
+          the specification of individual source files
+          and repositories.
+        2004-07-10: Eugen C. Nistor [enistor@ics.uci.edu]:
+          Initial development
+
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!--
+    TYPE: JavaSourceCodeManager
+
+    The JavaSourceCodeManager type contains information 
+    about an application that knows how to create and 
+    maintain a link between the component, connector or 
+    interface and their source code implementation
+   -->
+  <xsd:complexType name="JavaSourceCodeManager" abstract="true"/>
+
+  <!--
+    TYPE: RepositoryLocation
+
+    A RepositoryPath is either a pathname or a url (or both)
+    pointing to a repository containing source code files.
+    It is intended that this may be a directory, or a pointer
+    to an archive such as a .zip or .jar file.
+   -->
+  <xsd:complexType name="RepositoryLocation">
+    <xsd:sequence>
+      <xsd:element name="url"  type="archinst:XMLLink"
+                   minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="fileName" type="xsd:string"/>
+    <xsd:attribute name="path"     type="xsd:string"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: JavaSourceFile
+    
+    The JavaSourceFile type contains the data necessary to locate
+    a Java source file.  The intended semantics are that each
+    source file should include at least a filename, such as
+    "Foo.java".  Additionally, a 'path' attribute is provided
+    to indicate where the file is located.  Also, one or more
+    repositories may be references as possible locations for
+    the source file.  If a repository is specified, then the
+    path can be a relative path from the repository root.
+    So, the repository might point to a "src.zip" file, 
+    the path might be "edu/uci/ics/" and the filename 
+    might be "Foo.java".
+   -->
+  <xsd:complexType name="JavaSourceFile">
+    <xsd:sequence>
+      <xsd:element name="repositoryLocation" type="RepositoryLocation"
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="fileName" type="xsd:string"/>
+    <xsd:attribute name="path"     type="xsd:string"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: JavaSourceCodeImplementation
+
+    The JavaSourceCodeImplmentation type extends
+    the abstract Implementation element with information 
+    about the source code for a component, connector, 
+    or interface type.
+    
+    The intended semantics here are that the implementation
+    is composed of 0 or more source code files, each of which
+    (as shown above) has a path/filename and an optional
+    repository.  It is also possible to specify a number
+    of repositories here; the intent is that these repositories
+    will be valid search locations for all the source code files
+    (so you don't have to specify the same repository for all
+    the source files if you don't want to).  Additionally, there
+    is the option to use a source code manager (e.g. an IDE) that 
+    may augment or replace the specification of individual source 
+    code files here.
+   -->
+  <xsd:complexType name="JavaSourceCodeImplementation">
+    <xsd:complexContent>
+      <xsd:extension base="impl:Implementation">
+        <xsd:sequence>
+          <xsd:element name="sourceCodeFile" type="JavaSourceFile"
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="repositoryLocation" type="RepositoryLocation" 
+                       minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="sourceCodeManager" type="JavaSourceCodeManager" 
+                       minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+</xsd:schema>

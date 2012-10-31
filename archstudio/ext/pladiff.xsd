@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/pladiff.xsd" 
+    xmlns:types="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd" 
+    xmlns:archinstance="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd" 
+    xmlns:options="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/options.xsd" 
+    xmlns:variants="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/pladiff.xsd" 
+    elementFormDefault="qualified" attributeFormDefault="qualified">
+    
+    <!-- Import namespaces used -->
+    <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd" 
+        schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd" />
+    <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd" 
+        schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd" />
+    <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/options.xsd" 
+        schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/options.xsd" />
+    <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd" 
+        schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd" />
+    <xsd:annotation>
+        <xsd:documentation>
+            xArch Diff XML Schema 2.0
+
+            The following elements are used to define how to
+            represent a change between Product Line Architectures.
+            This schema can be used to show when an element
+            (connector, etc.) was removed or added to a
+            preexisting architecture.
+
+            Depends on: {types.xsd, instance.xsd, options.xsd, variants.xsd}
+
+            Change Log:
+			   2004-05-02: Ping Chen, Chris Van der Westhuizen:
+				 Changed the schema to be unique for product line architecture
+				 in order to be differentiated from runtime diff and merge
+               2003-10-26: Ping Chen, Matt Critchlow, Akash Garg, Chris Van
+                 der Westhuizen:
+                 Changed the Add Subarchitecture to contain only the description
+                 of the subarchitecture.
+               2003-05-12: Ping Chen, Matt Critchlow, Akash Garg, Chris Van
+                 der Westhuizen:
+                 Cleaned up the document.  Fixed up some naming inconsistencies
+               2003-05-08: Ping Chen, Matt Critchlow, Akash Garg, Chris Van
+                 der Westhuizen:
+                 Augmented addLink and addSignatureInterfaceMapping with
+                 information about the endpoints they are connected to.
+                 Also added ability to add/remove optionals.
+               2003-04-22: Ping Chen, Matt Critchlow, Akash Garg, Chris Van
+                 der Westhuizen:
+                 Re-wrote the schema for the diff document to become
+                 hierarchical.  Now allows for fine-grained diffing of
+                 elements such as interfaces, variants, and signatures.
+                 Finally, added support for sub-structures.
+               2002-07-23: Eric M. Dashofy [edashofy@ics.uci.edu]:
+                 Changed location of core (xArch) schema in the import
+                 statement to a more stable URL.
+               2002-01-28: Eric M. Dashofy [edashofy@ics.uci.edu]:
+                Upgraded to 2001 XML Schema standard and validated
+                 with XML Spy 4.2.  Only changes were to the namespace
+                 declaration for 'xsd' in the header.
+               2001-04-12: Eric M. Dashofy [edashofy@ics.uci.edu]:
+                 Cleanup and validation by XML Spy 3.5.
+               2001-04-09: Christopher van der Westhuizen 
+                 [vanderwe@uci.edu]:
+                 Initial development and internal release.
+        </xsd:documentation>
+    </xsd:annotation>
+    <!--
+      Element: PLADiff
+
+      The root element of any PLA diff; it sits under the xArch element in an
+      xArch document.
+    -->
+    <xsd:element name="plaDiff" type="PLADiff" />
+    <!--
+      TYPE: PLADiff
+
+      This type describes the difference between one PLA
+      and another.  It describes what was removed and added by
+      describing the root DiffPart.  This DiffPart describes all the
+      changes that should be made at the root level (the level in the
+      structural hierarchy that we are starting the diff process at).
+    -->
+    <xsd:complexType name="PLADiff">
+        <xsd:sequence>
+            <xsd:element name="diffPart" type="DiffPart" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+      TYPE: DiffPart
+
+      This element contains a description of the context of this diff,
+      or the location that these diff instructions should be applied at.
+      It also contains the list of additions and removals that should be
+      applied as well as a diff part for substructures.
+      Conceptually, a diff part represents all the differences at one
+      particular level in the hierarchy (substructure or variant types).
+      This diff part can contain more diff parts to represent
+      another level of substructure within the current structure.
+    -->
+    <xsd:complexType name="DiffPart">
+        <xsd:sequence>
+            <xsd:element name="diffLocation" type="DiffLocation" />
+            <xsd:element name="add" type="Add" minOccurs="0" 
+                maxOccurs="unbounded" />
+            <xsd:element name="remove" type="Remove" minOccurs="0" 
+                maxOccurs="unbounded" />
+            <xsd:element name="diffPart" type="DiffPart" minOccurs="0" 
+                maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+      Type: DiffLocation
+
+      This element contains the description of the location
+      in which the diff instruction should be applied.
+      It could either represent:
+      1. A description of an element - The diff should be applied to the
+            subarchitecture within that element (component or connector)
+            - the type of that component.
+      2. A description of a variant - The diff should be applied to the
+            type that the variant with this description (guard) points to.
+    -->
+    <xsd:complexType name="DiffLocation">
+        <xsd:sequence>
+            <xsd:element name="location" type="archinstance:Description" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+      TYPE: Add
+
+      This element lists an addition to an architecture.
+      This would include the addition of a component,
+      connector, link, substructures, variants...
+      The list of adds is broken down into 2 basic groups,
+      1. Adds to the substructure of a type (arch structure entities)
+      2. Adds to the type itself (type entities).
+    -->
+    <xsd:complexType name="Add">
+        <xsd:choice>
+            <xsd:element name="addStructuralEntity" type="AddStructuralEntity" />
+            <xsd:element name="addTypeEntity" type="AddTypeEntity" />
+        </xsd:choice>
+    </xsd:complexType>
+    <!--
+      TYPE: AddStructuralEntity
+
+      This element lists an addition to an ArchStructure
+      element, i.e. component, connectors, links, and interfaces, optional.
+    -->
+    <xsd:complexType name="AddStructuralEntity">
+        <xsd:choice>
+            <xsd:element name="component" type="types:Component" />
+            <xsd:element name="connector" type="types:Connector" />
+            <xsd:element name="addLink" type="AddLink" />
+            <xsd:element name="addInterface" type="AddInterface" />
+            <xsd:element name="addOptional" type="AddOptional" />
+        </xsd:choice>
+    </xsd:complexType>
+    <!--
+     TYPE: AddLink
+
+     This element lists an addition of a link to a structure.
+    -->
+    <xsd:complexType name="AddLink">
+        <xsd:sequence>
+            <xsd:element name="link" type="types:Link" />
+            <xsd:element name="interfaceEndPoint" type="InterfaceEndPoint" 
+                minOccurs="2" maxOccurs="2" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+     TYPE: InterfaceEndPoint
+
+     This element describes the endpoint to a link or signature interface 
+     mapping in terms of its connected interface's description and the connected 
+     component/connector.
+    -->
+    <xsd:complexType name="InterfaceEndPoint">
+        <xsd:sequence>
+            <xsd:element name="interfaceDescription" 
+                type="archinstance:Description" />
+            <xsd:element name="connectingElementDescription" 
+                type="archinstance:Description" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+     TYPE: AddInterface
+
+     This element lists the addition of an Interface.
+     It is broken down into two parts: the description of the element
+     that contains this interface, and the interface itself.
+     The description of the element is required so that we can easily
+     find the element that holds this interface
+    -->
+    <xsd:complexType name="AddInterface">
+        <xsd:sequence>
+            <xsd:element name="elementDescription" 
+                type="archinstance:Description" />
+            <xsd:element name="interface" type="types:Interface" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+     TYPE: AddOptional
+
+     This element lists the addition of an optional..
+     It is broken down into two parts: the description of the element
+     that contains this optional, and the optional itself.
+     The description of the element is required so that we can easily
+     find the element that holds this optional
+    -->
+    <xsd:complexType name="AddOptional">
+        <xsd:sequence>
+            <xsd:element name="elementDescription" 
+                type="archinstance:Description" />
+            <xsd:element name="optional" type="options:Optional" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+      TYPE: AddTypeEntity
+
+      This element lists an addition to an actual Type
+      element, i.e. variants, signatures,
+      substructures-, and signature interface mappings.
+      We also included the name of the element (diff location) that
+      these additions should be applied to.  This way, we can easily
+      locate where to add the signature (or whatever else).
+    -->
+    <xsd:complexType name="AddTypeEntity">
+        <xsd:sequence>
+            <xsd:element name="diffLocation" type="DiffLocation" />
+            <xsd:choice>
+                <xsd:element name="signature" type="types:Signature" />
+                <xsd:element name="variant" type="variants:Variant" />
+                <xsd:element name="subArchitecture" 
+                    type="archinstance:Description" />
+                <xsd:element name="addSignatureInterfaceMapping" 
+                    type="AddSignatureInterfaceMapping" />
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+     TYPE: AddSignatureInterfaceMapping
+
+     This element lists an addition of a signature interface mapping to a 
+     structure.  It is augmented with the description of the two endpoints this 
+     connects.
+    -->
+    <xsd:complexType name="AddSignatureInterfaceMapping">
+        <xsd:sequence>
+            <xsd:element name="signatureInterfaceMapping" 
+                type="types:SignatureInterfaceMapping" />
+            <xsd:element name="signatureEndPoint" type="SignatureEndPoint" />
+            <xsd:element name="interfaceEndPoint" type="InterfaceEndPoint" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+     TYPE: SignatureEndPoint
+
+     This element describes an endpoint at either side of a signature in 
+     terms of its connected signature interface mapping's description and 
+     the connected component/connector.
+    -->
+    <xsd:complexType name="SignatureEndPoint">
+        <xsd:sequence>
+            <xsd:element name="signatureDescription" 
+                type="archinstance:Description" />
+            <xsd:element name="outerElementDescription" 
+                type="archinstance:Description" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <!--
+      TYPE: Remove
+
+      This element indicates a removal of an element
+      from an architecture.  This includes the removal
+      of a structural or type entity.
+    -->
+    <xsd:complexType name="Remove">
+        <xsd:choice>
+            <xsd:element name="removeStructuralEntity" 
+                type="RemoveStructuralEntity" />
+            <xsd:element name="removeTypeEntity" type="RemoveTypeEntity" />
+        </xsd:choice>
+    </xsd:complexType>
+    <!--
+      TYPE: RemoveStructuralEntity
+
+      This element lists a removal to an ArchStructure
+      element, i.e. component, connector, link, or interface.
+    -->
+    <xsd:complexType name="RemoveStructuralEntity">
+        <xsd:choice>
+            <xsd:element name="component" type="archinstance:Description" />
+            <xsd:element name="connector" type="archinstance:Description" />
+            <xsd:element name="link" type="archinstance:Description" />
+            <xsd:element name="removeInterface" type="RemoveInterface" />
+            <xsd:element name="removeOptional" type="RemoveOptional" />
+        </xsd:choice>
+    </xsd:complexType>
+    <!--
+     TYPE: RemoveInterface
+
+     This element lists a removal of an Interface.
+     Similar to the AddInterface, it includes
+     the description of the element (component/connector) that
+     contains this interface.
+    -->
+    <xsd:complexType name="RemoveInterface">
+        <xsd:sequence>
+            <xsd:element name="elementDescription" 
+                type="archinstance:Description" />
+            <xsd:element name="interfaceDescription" 
+                type="archinstance:Description" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+     TYPE: RemoveOptional
+
+     This element lists a removal of an optional.
+     Similar to the AddOptional, it includes
+     the description of the element (component/connector) that
+     contains this optional.
+    -->
+    <xsd:complexType name="RemoveOptional">
+        <xsd:sequence>
+            <xsd:element name="elementDescription" 
+                type="archinstance:Description" />
+            <xsd:element name="optionalDescription" 
+                type="archinstance:Description" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+      TYPE: RemoveSignatureInterfaceMapping
+
+      This element lists a removal of a SignatureInterfaceMapping.
+      Since signature-interface-mappings doesn't have descriptions
+      of their own, we describe them by the description of its 2
+      endpoints (the outer signature and the inner interface).
+    -->
+    <xsd:complexType name="RemoveSignatureInterfaceMapping">
+        <xsd:sequence>
+            <xsd:element name="outerSignatureDescription" 
+                type="archinstance:Description" />
+            <xsd:element name="innerInterfaceDescription" 
+                type="archinstance:Description" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <!--
+      TYPE: RemoveTypeEntity
+
+      This element lists a removal to an actual Type
+      element, i.e. componentType, connectorType, or
+      an interfaceType.
+      We also included the name of the element (diff location) that
+      these removals should be applied to.  This way, we can easily
+      locate where to remove the signature (or whatever else).
+    -->
+    <xsd:complexType name="RemoveTypeEntity">
+        <xsd:sequence>
+            <xsd:element name="diffLocation" type="DiffLocation" />
+            <xsd:choice>
+                <xsd:element name="signature" type="archinstance:Description" />
+                <!--
+                    This description doesn't mean anything since
+                    we don't need a type for the removeSubArchitecture
+                    element. Only one subArchitecture anyways.
+                -->
+                <xsd:element name="subArchitecture" 
+                    type="archinstance:Description" />
+                <xsd:element name="variant" type="archinstance:Description" />
+                <xsd:element name="removeSignatureInterfaceMapping" 
+                    type="RemoveSignatureInterfaceMapping" />
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>
