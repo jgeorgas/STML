@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/implementation.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:archinst="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+            xmlns:archtypes="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+            xmlns:archvariants="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd"
+            targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/implementation.xsd"
+            elementFormDefault="qualified"
+            attributeFormDefault="qualified">
+
+  <!-- Import namespaces used -->
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"/>
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"/>
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/variants.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      xArch Implementation Stub XML Schema 1.0
+      
+      Depends on: {types.xsd, variants.xsd}
+         Note: The actual dependency set of this extension is
+         just types, but because of XML Schema 1.0's single
+         inheritance model, we also extend variants
+         so that a component/connector type may have both 
+         variants and an implementation.
+         
+      Change Log:
+         2007-02-09: Scott A. Hendrickson [shendric@uci.edu]:
+           Added SignatureImpl type to support associating
+           lookupimplementation names with signatures.
+         2004-07-16: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed cardinality of implementation element
+           on types from 0-1 to 0+.
+         2002-07-23: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed location of core (xArch) schema in the import
+           statement to a more stable URL.
+         2002-01-28: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Upgraded to 2001 XML Schema standard and validated
+           with XML Spy 4.2.  Only changes were to the namespace
+           declaration for 'xsd' in the header.
+         2001-04-12: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Cleaned up and validated with XML Spy 3.5.
+         2000-12-05: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed "Variable*Type" to "Variant*Type" to match
+           variants.xsd specification.  Thanks to Nathan D.
+           Ryan [Nathan.Ryan@colorado.edu].
+         2000-10-16: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Adapted to work with new instances/types model,
+           changed dependency so it depends on variants and
+           types (see notes above).
+         2000-09-28: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Initial Development and validated with XSV
+
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!--
+    TYPE: Implementation
+
+    The Implementation type is abstract at this level because
+    it is important to establish its place in the XML-trees
+    at this point (namely, a sub-element of Component, Connector,
+    and Interface Types), but given the wide range of implementation
+    technologies available, it is not possible to anticipate
+    all of them.  So, in lieu of that, the Implementation
+    type provides a hook that can be realized via an extension
+    such as 'JavaImplementation' or 'DCOMImplementation', etc.
+    with all details necessary to comprehend the implementation
+    of a given component.
+   -->
+  <xsd:complexType name="Implementation" abstract="true"/>
+  
+  <!--
+    TYPE: VariantComponentTypeImpl
+    
+    The VariantComponentTypeImpl type extends the VariantComponentType
+    type to add the ability to add an optional implementation specification 
+    to a component type.  If all instantiated components, connectors,
+    and interfaces have types with specified implementations, it
+    should be possible to start a running system.
+   -->
+  <xsd:complexType name="VariantComponentTypeImpl">
+    <xsd:complexContent>
+      <xsd:extension base="archvariants:VariantComponentType">
+        <xsd:sequence>
+          <xsd:element name="implementation" type="Implementation"
+                       minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: VariantConnectorTypeImpl 
+    
+    The VariantConnectorTypeImpl type extends the VariantConnectorType 
+    type to add the ability to add an optional implementation specification 
+    to a connector type.  If all instantiated components, connectors,
+    and interfaces have types with specified implementations, it
+    should be possible to start a running system.
+   -->
+  <xsd:complexType name="VariantConnectorTypeImpl">
+    <xsd:complexContent>
+      <xsd:extension base="archvariants:VariantConnectorType">
+        <xsd:sequence>
+          <xsd:element name="implementation" type="Implementation"
+                       minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  
+  <!--
+    TYPE: InterfaceTypeImpl
+    
+    The InterfaceTypeImpl type extends the InterfaceType
+    type to add the ability to add an optional implementation specification 
+    to an interface type.  If all instantiated components, connectors,
+    and interfaces have types with specified implementations, it
+    should be possible to start a running system.
+   -->
+  <xsd:complexType name="InterfaceTypeImpl">
+    <xsd:complexContent>
+      <xsd:extension base="archtypes:InterfaceType">
+        <xsd:sequence>
+          <xsd:element name="implementation" type="Implementation"
+                       minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  
+  <!--
+    TYPE: SignatureImpl
+    
+    The SignatureImpl type extends the Signature
+    type to add the ability to add an optional implementation specification 
+    to a signature.  If all instantiated components, connectors,
+    and interfaces have types with specified implementations, it
+    should be possible to start a running system.
+   -->
+  <xsd:complexType name="SignatureImpl">
+    <xsd:complexContent>
+      <xsd:extension base="archtypes:Signature">
+        <xsd:sequence>
+          <xsd:element name="implementation" type="Implementation"
+                       minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  
+</xsd:schema>

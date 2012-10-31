@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/statecharts.xsd" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:instance="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+	targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/statecharts.xsd" 
+	elementFormDefault="qualified" 
+	attributeFormDefault="qualified">
+
+	<xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd" schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"/>
+
+
+<xsd:annotation>
+    <xsd:documentation>
+      xArch Statechart XML Schema 1.0
+      
+      Change Log:
+         2006-08-02: Yuzo Kanomata [yuzok@ics.uci.edu]:
+           Initial Development for ArchStudio4 project. Based on earlier work by Scott Hendrickson, lihua Xu, and Eric Hettwer.
+
+    </xsd:documentation>
+  </xsd:annotation>
+  
+<!--
+	Statechart
+	
+	The Statechart schema allows statecharts to be modeled. It generally follows the definition of statecharts found in UML
+	with some differences noted below for simplicity. Some elements that are needed for complete modeling include conditional 
+	transition and statecharts within a stateType, but these are complicated to define and keep track of so are not included
+	in this release. 
+	
+	In this Schema we forward declare simple types ahead of comples types to aid developers in extending this schema.
+	
+	
+-->
+
+<!-- 
+	TYPE: Statechart
+	
+	This is root element for the statechart schema.
+	
+-->
+
+	<xsd:element name="statechart" type="Statechart"/>
+	
+<!--
+	TYPE: StateType
+	
+	A simple classification of a state. There is an initial state possible, various intermediate states which simply share
+	the name state here, and a final state.
+-->
+
+	<xsd:simpleType name="StateType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="initial" />
+			<xsd:enumeration value="state" />
+			<xsd:enumeration value="final" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+<!--
+	TYPE: Statechart
+	
+	A Statechart Type consists of Description which describes what the particular Statechart is; the States represented in
+	the Statechart, and the transitions between the States.
+	
+	The attibute of this Type inculdes an id identifier whose purpose is to uniquely identify the Statechart. This is designed to aid tools.
+-->
+	
+	<xsd:complexType name="Statechart">
+		<xsd:sequence>
+			<xsd:element name="description" type="instance:Description"/>
+			<xsd:element name="state" type="State" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="transition" type="Transition" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="instance:Identifier"/>
+	</xsd:complexType>
+	
+<!--
+	TYPE: State
+	
+	A state is a condition in which an object (or entity) rests until some event occurs and causes a change in state.
+	This change of state is called a transition.
+	
+	A State is one of the three elements a Statechart may have. It consists of a Description;
+	an entry set of Actions that define the preconditions before this state may come into effect;
+	an exit set of Actions that occur when leaving this state; a set of Actions done when in this
+	state.
+	
+	The State attributes consist of:
+	one of the three simple StateType(s) - initial, final, or (one of possibily many intermediate) states
+	a unique identifier
+-->
+
+	<xsd:complexType name="State">
+		<xsd:sequence>
+			<xsd:element name="description" type="instance:Description"/>
+			<xsd:element name="entry" type="Action" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="exit" type="Action" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="doActivity" type="Action" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="stateType" type="StateType"/>
+		<xsd:attribute name="id" type="instance:Identifier"/>
+	</xsd:complexType>
+	
+<!--
+	TYPE: Transition
+	
+	A Transition is a change from one state to another. It will be triggered by an event.
+	
+	Transition may have an associated guard condition.
+	
+	Triggers are causes for transitions. Here they are identified by the set of events needed to involke
+	the transition.
+	
+-->
+
+	<xsd:complexType name="Transition">
+		<xsd:sequence>
+			<xsd:element name="description" type="instance:Description"/>
+			<xsd:element name="trigger" type="Event" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="guard" type="Guard" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="effect" type="Action" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="fromState" type="instance:XMLLink"/>
+			<xsd:element name="toState" type="instance:XMLLink"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="instance:Identifier"/>
+	</xsd:complexType>
+	
+<!-- 
+	TYPE: Event
+	
+	Events are the underyling dynamo of state change. In UML they can be:
+		signal event - reception of particular asynchronous communication
+		call event - synchronous communication in which object invokes operation on another object (or on itself)
+		time event - occurs after pre-determined period of time
+		change event - occurs when some condition is satisfied. Raised implicitly and not the result of any explicit action
+		
+	Events in this Schema are meant to siginify the siginifcant moments of action or change that occur that affect the
+	Statechart model and the underlying entities therein.
+-->
+
+
+	<xsd:complexType name="Event" abstract="true"/>
+	
+<!--
+	TYPE: Action
+	
+	An action is something that is invoked by/on the entity being modeled. 
+	
+	Example: In the case of class being modeled, it is an opertaion.
+	
+	Actions are not transitions of state, rather operations occuring in a state. 
+	
+-->
+
+	<xsd:complexType name="Action" abstract="true"/>
+<!--
+	TYPE: Guard
+	
+	A guard is a condition that must be true in order to traverse a transition.
+-->
+
+	<xsd:complexType name="Guard" abstract="true"/>
+	
+</xsd:schema>

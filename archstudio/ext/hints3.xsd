@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/hints3.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:archinstance="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+            targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/hints3.xsd"
+            elementFormDefault="qualified"
+            attributeFormDefault="qualified">
+
+  <!-- Import namespaces used -->
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      xArch Rendering Hints 3 XML Schema 1.0
+      
+      Depends on: {instance.xsd}
+      Change Log:
+         2006-10-17: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Initial Development.
+    </xsd:documentation>
+  </xsd:annotation>
+  
+  <!--
+    ELEMENT: renderingHints3
+    
+    The renderingHints3 element (of type RenderingHints3) is the root 
+    element that is the aegis over all rendering hints in the 
+    architecture. See the RenderingHints3 type for more detailed 
+    information.
+   -->
+  <xsd:element name="renderingHints3" type="RenderingHints3"/>
+
+  <!--
+    TYPE: PropertyValue
+   -->
+  <xsd:complexType name="PropertyValue">
+    <xsd:sequence>
+      <xsd:element name="value" type="PropertyValue"
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="type" type="xsd:string"/>
+    <xsd:attribute name="data" type="xsd:string"/>
+  </xsd:complexType>
+
+  <!--
+    TYPE: Property
+   -->
+  <xsd:complexType name="Property">
+    <xsd:sequence>
+      <xsd:element name="value" type="PropertyValue"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="HintedElement">
+    <xsd:sequence>
+      <xsd:element name="target"        type="archinstance:XMLLink"
+                   minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="property"  type="Property"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="hintedElement" type="HintedElement"
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="identifier" type="xsd:string"/>
+    <xsd:attribute name="type" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="HintBundle">
+    <xsd:complexContent>
+      <xsd:extension base="HintedElement">
+        <xsd:attribute name="maintainer" type="xsd:string"/>
+        <xsd:attribute name="version"    type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: RenderingHints3
+   -->
+  <xsd:complexType name="RenderingHints3">
+    <xsd:sequence>
+      <xsd:element name="hintedElement" type="HintedElement"
+                   minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema 
+    xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/diff.xsd"
+    xmlns:types="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd" 
+    xmlns:archinstance="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/diff.xsd"
+    elementFormDefault="qualified"
+    attributeFormDefault="qualified">
+
+    <!-- Import namespaces used -->
+    <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+                schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"/>
+    <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+                schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"/>
+                
+    <xsd:annotation>
+      <xsd:documentation>
+        xArch Diff XML Schema 1.0
+
+        The following elements are used to define how to 
+        represent a change between architectures.
+        This schema can be used to show when an element 
+        (connector, etc.) was removed or added to a 
+        preexisting architecture.
+      
+        Depends on: {types.xsd, instance.xsd}
+
+        Change Log:
+           2002-07-23: Eric M. Dashofy [edashofy@ics.uci.edu]:
+             Changed location of core (xArch) schema in the import
+             statement to a more stable URL.
+           2002-01-28: Eric M. Dashofy [edashofy@ics.uci.edu]:
+            Upgraded to 2001 XML Schema standard and validated
+             with XML Spy 4.2.  Only changes were to the namespace
+             declaration for 'xsd' in the header.
+           2001-04-12: Eric M. Dashofy [edashofy@ics.uci.edu]:
+             Cleanup and validation by XML Spy 3.5.
+           2001-04-09: Christopher van der Westhuizen [vanderwe@uci.edu]:
+             Initial development and internal release.
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <!--
+      Element: Diff
+		
+      The root element of any diff; it sits under the xArch element in an xArch
+      document.
+     -->
+    <xsd:element name="diff" type="Diff"/>
+
+    <!--
+      TYPE: Add
+		
+      This element lists an addition to an architecture.  
+      This would include the addition of a component, 
+      connector, link, group, componentType, connectorType, 
+      or an interfaceType.  The definition of the element 
+      added is listed within the Add element.
+     -->
+    <xsd:complexType name="Add">
+        <xsd:choice>
+            <xsd:element name="component"     type="types:Component"/>
+            <xsd:element name="connector"     type="types:Connector"/>
+            <xsd:element name="link"          type="types:Link"/>
+            <xsd:element name="group"         type="archinstance:Group"/>
+            <xsd:element name="componentType" type="types:ComponentType"/>
+            <xsd:element name="connectorType" type="types:ConnectorType"/>
+            <xsd:element name="interfaceType" type="types:InterfaceType"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <!--
+      TYPE: Remove
+		
+      This element indicates a removal of an element 
+      from an architecture.  This includes the removal 
+      of a component, connector, link, group, componentType, 
+      connectorType, or an interfaceType.  The id of the 
+      element to be removed is included in the remove element.
+     -->
+    <xsd:complexType name="Remove">
+        <xsd:attribute name="removeId" type="archinstance:Identifier"/>
+    </xsd:complexType>
+
+    <!--
+      TYPE: DiffPart
+		
+      This element contains either an add or a remove.
+     -->
+    <xsd:complexType name="DiffPart">
+        <xsd:choice>
+            <xsd:element name="add" type="Add"/>
+            <xsd:element name="remove" type="Remove"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <!--
+      TYPE: Diff
+		
+      This type describes the difference between one architecture 
+      and another.  It describes what was removed and added by 
+      means of a sequence of different diff elements each
+      describing either a remove or an add.  By having a sequence 
+      of diffParts it is possible to describe an unlimited 
+      number of adds or removes in any specified order.
+     -->
+    <xsd:complexType name="Diff">
+        <xsd:sequence>
+            <xsd:element name="diffPart" type="DiffPart" 
+                         minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

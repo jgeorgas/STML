@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/prociface.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:archinstance="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+            xmlns:archtypes="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+            targetNamespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/prociface.xsd"
+            elementFormDefault="qualified"
+            attributeFormDefault="qualified">
+
+  <!-- Import types namespace -->
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/core/instance.xsd"/>
+  <xsd:import namespace="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"
+              schemaLocation="http://dana.ucc.nau.edu/jew69/schemas/archstudio/ext/types.xsd"/>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      xArch Interface Extension XML Schema 1.0
+
+      Depends on: {types.xsd, options.xsd}
+
+      Change Log:
+        2002-07-23: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Changed location of core (xArch) schema in the import
+           statement to a more stable URL.
+        2002-01-28: Eric M. Dashofy [edashofy@ics.uci.edu]:
+           Upgraded to 2001 XML Schema standard and validated
+           with XML Spy 4.2.  Only changes were to the namespace
+           declaration for 'xsd' in the header.
+        05-23-2001: Eric M. Dashofy [edashofy@ics.uci.edu]:
+            Cleanup and validation with XML Spy 3.5.
+         05-19-2001: Andre van der Hoek [andre@ics.uci.edu]:
+            Made this a procedural interface extension only
+         03-17-2001: Roberto Silveira Silva Filho [rsilvafi@ics.uci.edu]:
+
+            Initial Development and validated with XSV
+
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!--
+    TYPE: ParameterType
+
+    Specifies a generic ParameterType
+   -->
+
+  <xsd:complexType name="ParameterType">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string"/>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: Name
+
+    Describes strings that are names of functions and variables.
+   -->
+
+  <xsd:complexType name="Name">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string"/>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: ProceduralInterface
+
+    Specifies a generic list of Interface declarations
+    If there is not operation declarations, null is assumed
+   -->
+
+  <xsd:complexType name="ProceduralInterface">
+	<xsd:complexContent>
+		<xsd:extension base="archtypes:Interface">
+			<xsd:sequence>
+				<xsd:element name="procedure" type="ProcedureDeclaration"
+                                             minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:extension>
+	</xsd:complexContent>
+  </xsd:complexType>
+
+  <!--
+    TYPE: ProcedureDeclaration
+
+    Specifies a generic declaration of function:
+	An interface is a set of operations.
+   -->
+
+  <xsd:complexType name="ProcedureDeclaration">
+	<xsd:sequence>
+		<xsd:element name="returnType" type="ParameterType"
+                             minOccurs="0" maxOccurs="1"/>
+		<xsd:element name="name" type="Name"
+                             minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="parameter" type="ParameterDeclaration"
+                             minOccurs="0" maxOccurs="unbounded"/> 
+                <xsd:element name="exceptionThrown" type="ParameterType"
+                             minOccurs="0" maxOccurs="unbounded"/>
+	</xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+    TYPE: ParameterDeclaration
+
+    Specifies a generic type name declaration
+   -->
+  <xsd:complexType name="ParameterDeclaration">
+	<xsd:sequence>
+		<xsd:element name="type" type="ParameterType"/>
+		<xsd:element name="name" type="Name"/>
+		<xsd:element name="direction" type="archinstance:Direction"
+				   minOccurs="0" maxOccurs="1"/>
+	</xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>
