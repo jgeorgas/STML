@@ -29,6 +29,10 @@
         11/28/2011 -- [John.Georgas@nau.edu]
         Initial release of the resource schema, after re-factoring and clean-up
         of the STML language (previously called STCML).
+	 10/29/2012 -- [jew69@nau.edu]
+	 Updated schema references to reflect new webspace
+	 Fixed misc. typos/syntax errors
+	 Added namespace import to address dependency for type ResourceNode
         
         NOTES:
         -- Directly referencing elements of xADL here "brings in" descriptions of

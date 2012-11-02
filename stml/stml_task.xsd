@@ -30,6 +30,11 @@
         11/20/2011 -- [John.Georgas@nau.edu]
         Initial release of the resource schema, after re-factoring and clean-up
         of the STML language (previously called STCML).
+	 10/29/2012 -- [jew69@nau.edu]
+	 Updated schema references to reflect new webspace
+	 Fixed misc. typos/syntax errors
+	 Added namespace imports stmlgraph, stmlcore to address dependencies for types TaskNode,
+   	 StringContent(respectively)
         
         NOTES:
         -- Is TaskNode really needed? Networks of tasks?

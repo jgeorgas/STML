@@ -29,6 +29,9 @@
         1/30/2012 -- [John.Georgas@nau.edu]
         Added additional elements to support linking to events: LinkedEdge, WeightedLinkedEdge,
         DirectedLinkedEdge, WeightedDirectedLinkedEdge
+	 10/29/2012 -- [jew69@nau.edu]
+	 Updated schema references to reflect new webspace
+	 Fixed misc. typos/syntax errors
         
         NOTES:
         				

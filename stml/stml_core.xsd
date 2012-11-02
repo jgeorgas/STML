@@ -44,6 +44,9 @@
         11/18/2011 -- [John.Georgas@nau.edu]
         Initial release of the core schema, after re-factoring of the STML language
         (previously called STCML).
+	 10/29/2012 -- [jew69@nau.edu]
+	 Updated schema references to reflect new webspace
+	 Fixed misc. typos/syntax errors
         				
         TODO:
         	
